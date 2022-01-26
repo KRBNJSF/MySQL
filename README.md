@@ -1,5 +1,6 @@
 # MySQL
 
+<a href="https://vydb1.spsmb.cz/phpmyadmin/index.php">login</a>
 
 Seskupování a souhrny
 ---
@@ -34,3 +35,9 @@ Rozdíl mezi count(*) a count(sloupec)
 ---
 `SELECT count(*), count(id) FROM obce GROUP BY krajske_mesto`<br>
 <b>Pokud je v sloupci hodnota NULL, COUNT(sloupec) jí nezapočítává, COUNT(*) ano.</b>
+
+Příklady
+---
+`SELECT DISTINCT os_cislo FROM hodiny`
+
+`SELECT vyrobky.nazev, SUM(polozky.mnozstvi) FROM polozky INNER JOIN vyrobky ON vyrobky.cislo=polozky.cislo_vyrobku GROUP BY vyrobky.nazev WITH ROLLUP`
