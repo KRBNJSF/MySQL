@@ -300,7 +300,10 @@ FROM data WHERE zastupce in ('Jitka', 'Pavla',
   ---
   
 - 1)Z tabulky obratů zjistěte počet řádků, součet a
-průměr obratů a nejvyšší a nejmenší obrat.
+průměr obratů a nejvyšší a nejmenší obrat. 
+  ```
+  SELECT COUNT(*) as pocet, SUM(obrat) as soucet, AVG(obrat) as prumer, MAX(obrat), MIN(obrat) FROM obraty
+  ```
 - 2)Z tabulky faktur zjistěte počet zaplacených faktur
 (vyplněno datum zaplacení).
 - 3)Z tabulky obratů vypočtěte součet obratů a počet
@@ -310,3 +313,8 @@ protiúčtů.
 - 5)Z tabulky obratů vypočítejte průměrný obrat pro
 jednotlivá čísla protiúčtů a celkový průměr.
   
+SELECT COUNT(faktury.zaplaceno) FROM faktury
+  
+  SELECT SUM(obrat), COUNT(obraty.ucet) from obraty
+  
+  SELECT COUNT(obraty.ucet) from obraty
