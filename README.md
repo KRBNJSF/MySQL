@@ -267,3 +267,17 @@ SELECT mesic, AVG(trzba) AS prumer , 'zeny' AS typ
 FROM data WHERE zastupce in ('Jitka', 'Pavla',
 'Marie') GROUp BY mesic
 ```
+  
+<b>Procvičení na konec</b>
+  
+- 1)Z tabulky obratů zjistěte počet řádků, součet a
+průměr obratů a nejvyšší a nejmenší obrat.
+- 2)Z tabulky faktur zjistěte počet zaplacených faktur
+(vyplněno datum zaplacení).
+- 3)Z tabulky obratů vypočtěte součet obratů a počet
+řádků pro jednotlivá čísla protiúčtů (sloupec „ucet“)
+- 4)Z tabulky obratů zjistěte počet jednotlivých
+protiúčtů.
+- 5)Z tabulky obratů vypočítejte průměrný obrat pro
+jednotlivá čísla protiúčtů a celkový průměr.
+  
