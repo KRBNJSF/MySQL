@@ -120,3 +120,150 @@ FROM drubez GROUP BY druh HAVING
 SUM(pocet) > 10;
   ```
   
+<b>KOMBINACE FILTRŮ</b>
+ Pořadí:
+- 1)Předběžná filtrace (WHERE),
+- 2)seskupení (GROUP BY),
+- 3)následná filtrace (HAVING).
+  
+Dotaz sečte prodané kusy pro obě skupiny výrobků, omezí výběr
+na leden 2018 a ve výsledku zobrazí jen řádky, u kterých je
+celkový součet 10 a více:
+  
+```
+SELECT skupina, SUM(POCET) AS celkem FROM
+prodeje WHERE datum BETWEEN '2018-01-01' AND
+'2018-01-31' GROUP BY skupina HAVING SUM(pocet)
+>= 10;  
+```
+<b>VÝPOČET PŘED AGREGACÍ</b>
+Chceme znát cenu vyrobených součástek za
+každý den.
+  
+Během jednoho dne se však na lince vyrábí
+různé typy souč. s rozdílnou cenou.
+  
+Nejprve spočítáme cenu, poté sečteme:
+```
+SELECT datum, SUM(kusu*cena) AS
+celkem FROM vyroba GROUP BY datum;
+```
+<b>VÝPOČET PO AGREGACÍ</b>
+- Potřebujeme zjistit průmernou dobu potřebnou k výrobě
+jedné součástky.
+- Pro jednotlivé dny zjistíme celkový počet vyrobených
+součástek a celkovou provozní dobu
+- Obě hodnoty nakonec vydělíme a vynásobíme 60 pro
+obdržení počtu sekund potřebných pro výrobu jedné
+součástky:
+  
+```
+SELECT datum, SUM(cas)/SUM(kusu) * 60 AS
+podil FROM vyroba GROUP BY datum;
+```
+
+<b>VZOREC V GROUP BY</b>
+Sečtení vyrobených kusů po měsících:
+```
+SELECT MONTH(datum) AS mesic, SUM(kusu) AS celkem
+FROM vyroba GROUP BY MONTH(datum);  
+```
+Sečtení počtu vyrobených součástek podle skupin (skupina = první dva
+znaky v kódu souč.):
+```
+SELECT LEFT(kod, 2) AS skupina, SUM(kusu) AS celkem
+FROM vyroba GROUP BY LEFT(kod, 2);
+```
+Zjištění počtu obratů do 1000Kč a nad:
+```
+ SELECT CASE WHEN obrat<1000 THEN '<1000' ELSE
+'>1000' END AS vyse_obratu, COUNT(obrat) AS pocet
+FROM obraty GROUP BY CASE WHEN obrat<1000 THEN
+'<1000' ELSE '>1000' END; 
+```
+  
+<b>SOUHRNY Z VÍCE TABULEK</b>
+Výpočet celkových dodaných množství pro jednotlivé výroby:
+```
+SELECT vyrobky.nazev, SUM(dodavky.mnozstvi)
+AS soucet FROM vyrobky INNER JOIN dodavky ON
+dodavky.cislo_vyrobku=vyrobky.cislo GROUP BY
+vyrobky.nazev;
+```
+Dotaz, zjišťující, kolikrát byly dané výrobky prodány:
+```
+SELECT vyrobky.nazev, COUNT(dodavky.mnozstvi)
+AS pocet1, COUNT(*) AS pocet2 FROM vyrobky
+INNER JOIN dodavky ON
+dodavky.cislo_vyrobku=vyrobky.cislo GROUP BY
+vyrobky.nazev;
+```
+Zjištění data poslední dodávky:
+```
+SELECT vyrobky.nazev, MAX(dodavky.datum) AS
+posledni FROM vyrobky INNER JOIN dodavky ON
+dodavky.cislo_vyrobku = vyrobky.cislo GROUP
+BY vyrobky.nazev;
+```
+Zobrazení úhrnných tržeb:
+```
+SELECT vyrobky.nazev,
+SUM(vyrobky.cena*dodavky.mnozstvi) AS trzba
+FROM vyrobky INNER JOIN dodavky ON
+dodavky.cislo_vyrobku = vyrobky.cislo GROUP
+BY vyrobky.nazev;
+```
+Úhrnná dodaná množství za rok 2017:
+```
+SELECT vyrobky.nazev, SUM(dodavky.mnozstvi) AS
+celkem FROM vyrobky INNER JOIN dodavky ON
+dodavky.cislo_vyrobku = vyrobky.cislo WHERE
+dodavky.datum BETWEEN '2017-01-01' AND '2017-12-31'
+GROUP BY vyrobky.nazev HAVING
+SUM(dodavky.mnozstvi)>200;
+```
+Pět výrobků s nejvyššími tržbami:
+```
+SELECT vyrobky.nazev, ROUND(SUM(vyrobky.cena *
+dodavky.mnozstvi),0) AS trzba FROM vyrobky INNER
+JOIN dodavky ON dodavky.cislo_vyrobku =
+vyrobky.cislo GROUP BY vyrobky.nazev ORDER BY trzba
+DESC LIMIT 5;
+```
+Zobraz tržby včetně DPH pro jednotlivé zákazníky:
+```
+SELECT zakaznici.jmeno, SUM(vyrobky.cena + vyrobky.cena
+* vyrobky.sazba_dph/100 * polozky.mnozstvi) AS trzba
+FROM zakaznici
+INNER JOIN faktury ON faktury.odberatel = zakaznici.id
+INNER JOIN polozky ON polozky.faktura = faktury.cislo
+INNER JOIN vyrobky on vyrobky.cislo =
+polozky.cislo_vyrobku
+GROUP BY zakaznici.jmeno
+```
+
+<b>VNĚJŠÍ SPOJENÍ TABULEK</b>
+- Dotaz, počítající pro všechny učitele celkové úvazky:
+- SELECT ucitele.jmeno, SUM(predmety.hodin) AS
+celkem FROM ucitele LEFT OUTER JOIN predmety
+ON ucitele.id = predmety.ucitel GROUP BY
+ucitele.jmeno;
+- Vylepšete, aby dotazmísto NULL ukazoval u
+Ladislava 0.
+- Zobrazte pomocí COUNT(), kolik předmětů jaký učitel
+vyučuje.
+  
+<b>SPOJENÍ DOTAZŮ SE SOUHRNEM</b>
+- Představme si tabulku prodejů, obsahující číslo měsíce, jméno
+prodejce, výši tržby a další údaje.
+- Spočítejme měsíční průměry prodejců zvlášť pro muže a zvlášť pro
+ženy, kdy tabulka neobsahuje informaci o pohlaví prodejce.
+```
+SELECT mesic, AVG(trzba) AS prumer , 'muzi' AS typ
+FROM data WHERE zastupce in ('Jaroslav', 'Petr',
+'Marek') GROUp BY mesic
+UNION
+SELECT mesic, AVG(trzba) AS prumer , 'zeny' AS typ
+FROM data WHERE zastupce in ('Jitka', 'Pavla',
+'Marie') GROUp BY mesic
+```
