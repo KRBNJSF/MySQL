@@ -51,6 +51,8 @@ slide 10
 ![image](https://user-images.githubusercontent.com/90755554/152794412-b2a2eed5-942b-454f-a334-911f0ece9e0b.png)
 
 <b>ZOBRAZENÍ CELKOVÉHO SOUHRNU</b><b>
+  
+  
 Seskupení podle jednoho sloupce:
 ```
 SELECT vyrobky.nazev, SUM(polozky.mnozstvi)
@@ -66,7 +68,10 @@ vyrobky ON
 vyrobky.cislo=polozky.cislo_vyrobku GROUP BY
 vyrobky.nazev WITH ROLLUP
 ```
-<b>ŘAZENÍ</b><br>
+  
+ŘAZENÍ
+---
+  
 Při seskupování dle více sloupců se řazení provede
 zleva doprava:
   ```
@@ -80,6 +85,7 @@ na konci dotazu:
 GROUP BY skupina, datum ORDER BY datum
   ```
   <b>PŘEDBĚŽNÁ FILTRACE</b><br>
+  ---
   Klauzule WHERE v dotaze se souhrnem znamená, že se
 filtrace provede ještě dříve, než se začnou řádky seskupovat.
   
@@ -95,6 +101,7 @@ prodeje WHERE datum BETWEEN '2018-01-01' AND
 IS NULL;
   ```
   <b>NÁSLEDNÁ FILTRACE</b>
+  ---
   Klauzuli HAVING používáme pro možnost
 výběru řádků až po seskupení.
   
@@ -107,6 +114,7 @@ FROM prodeje GROUP BY datum HAVING
 SUM(pocet) >=10;
  ```
   <b>WHERE VS HAVING</b>
+  ---
   Předběžná filtrace (WHERE):
 ```
 SELECT druh, SUM(pocet) AS celkem
@@ -121,6 +129,8 @@ SUM(pocet) > 10;
   ```
   
 <b>KOMBINACE FILTRŮ</b>
+  ---
+  
  Pořadí:
 - 1)Předběžná filtrace (WHERE),
 - 2)seskupení (GROUP BY),
@@ -137,6 +147,9 @@ prodeje WHERE datum BETWEEN '2018-01-01' AND
 >= 10;  
 ```
 <b>VÝPOČET PŘED AGREGACÍ</b>
+  ---
+  
+  
 Chceme znát cenu vyrobených součástek za
 každý den.
   
@@ -149,6 +162,9 @@ SELECT datum, SUM(kusu*cena) AS
 celkem FROM vyroba GROUP BY datum;
 ```
 <b>VÝPOČET PO AGREGACÍ</b>
+  ---
+  
+  
 - Potřebujeme zjistit průmernou dobu potřebnou k výrobě
 jedné součástky.
 - Pro jednotlivé dny zjistíme celkový počet vyrobených
@@ -163,6 +179,9 @@ podil FROM vyroba GROUP BY datum;
 ```
 
 <b>VZOREC V GROUP BY</b>
+  ---
+  
+  
 Sečtení vyrobených kusů po měsících:
 ```
 SELECT MONTH(datum) AS mesic, SUM(kusu) AS celkem
@@ -183,6 +202,9 @@ FROM obraty GROUP BY CASE WHEN obrat<1000 THEN
 ```
   
 <b>SOUHRNY Z VÍCE TABULEK</b>
+  ---
+  
+  
 Výpočet celkových dodaných množství pro jednotlivé výroby:
 ```
 SELECT vyrobky.nazev, SUM(dodavky.mnozstvi)
@@ -243,6 +265,9 @@ GROUP BY zakaznici.jmeno
 ```
 
 <b>VNĚJŠÍ SPOJENÍ TABULEK</b>
+  ---
+  
+  
 - Dotaz, počítající pro všechny učitele celkové úvazky:
 - SELECT ucitele.jmeno, SUM(predmety.hodin) AS
 celkem FROM ucitele LEFT OUTER JOIN predmety
@@ -254,6 +279,9 @@ Ladislava 0.
 vyučuje.
   
 <b>SPOJENÍ DOTAZŮ SE SOUHRNEM</b>
+  ---
+  
+  
 - Představme si tabulku prodejů, obsahující číslo měsíce, jméno
 prodejce, výši tržby a další údaje.
 - Spočítejme měsíční průměry prodejců zvlášť pro muže a zvlášť pro
@@ -269,6 +297,7 @@ FROM data WHERE zastupce in ('Jitka', 'Pavla',
 ```
   
 <b>Procvičení na konec</b>
+  ---
   
 - 1)Z tabulky obratů zjistěte počet řádků, součet a
 průměr obratů a nejvyšší a nejmenší obrat.
