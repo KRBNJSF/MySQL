@@ -325,3 +325,15 @@ jednotlivá čísla protiúčtů a celkový průměr.
 SELECT obraty.ucet, AVG(obraty.obrat) FROM obraty GROUP BY obraty.ucet WITH ROLLUP
 ```
 
+  
+1)  
+```  
+SELECT IFNULL(polozky.faktura, 'celkem'), polozky.cislo_vyrobku, SUM(polozky.castka) FROM polozky GROUP BY polozky.faktura, polozky.cislo_vyrobku WITH ROLLUP
+
+SELECT IFNULL(polozky.faktura, 'celkem'), SUM(polozky.castka) FROM polozky GROUP BY polozky.faktura WITH ROLLUP
+```
+  
+2)
+```
+  
+```
