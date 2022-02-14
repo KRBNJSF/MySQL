@@ -342,3 +342,11 @@ SELECT faktury.odberatel, SUM(faktury.castka) FROM faktury WHERE faktury.zaplace
 SELECT faktury.odberatel, SUM(faktury.castka) AS soucet FROM faktury 
 GROUP BY faktury.odberatel HAVING soucet > 40000 
 ```
+4)
+```
+
+```
+5)
+```
+  
+```
