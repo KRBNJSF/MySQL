@@ -325,7 +325,7 @@ jednotlivá čísla protiúčtů a celkový průměr.
 SELECT obraty.ucet, AVG(obraty.obrat) FROM obraty GROUP BY obraty.ucet WITH ROLLUP
 ```
 
-2.
+2. SLIDE
 ---
   
 1)  
