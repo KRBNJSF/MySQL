@@ -348,5 +348,5 @@ GROUP BY faktury.odberatel HAVING soucet > 40000
 ```
 5)
 ```
-  
+SELECT polozky.faktura, SUM(polozky.castka /polozky.mnozstvi) FROM polozky GROUP BY polozky.faktura
 ```
