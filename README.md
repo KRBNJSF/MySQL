@@ -318,3 +318,5 @@ SELECT COUNT(faktury.zaplaceno) FROM faktury
   SELECT SUM(obrat), COUNT(obraty.ucet) from obraty
   
   SELECT COUNT(obraty.ucet) from obraty
+  
+  SELECT obraty.ucet, AVG(obraty.obrat) FROM obraty GROUP BY obraty.ucet WITH ROLLUP
