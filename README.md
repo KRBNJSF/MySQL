@@ -337,3 +337,8 @@ SELECT IFNULL(polozky.faktura, 'celkem'), SUM(polozky.castka) FROM polozky GROUP
 ```
   
 ```
+3)
+```
+SELECT faktury.odberatel, SUM(faktury.castka) AS soucet FROM faktury 
+GROUP BY faktury.odberatel HAVING soucet > 40000 
+```
