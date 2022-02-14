@@ -299,6 +299,9 @@ FROM data WHERE zastupce in ('Jitka', 'Pavla',
 <b>Procvičení na konec</b>
   ---
   
+  <details>
+  <summary><b>1. SLIDE</b></summary>
+  
 - 1)Z tabulky obratů zjistěte počet řádků, součet a
 průměr obratů a nejvyšší a nejmenší obrat. 
 ```
@@ -324,31 +327,41 @@ jednotlivá čísla protiúčtů a celkový průměr.
 ```
 SELECT obraty.ucet, AVG(obraty.obrat) FROM obraty GROUP BY obraty.ucet WITH ROLLUP
 ```
-
-2. SLIDE
----
   
-1)  
+  </details>
+
+<details>
+  <summary><b>2. SLIDE</b></summary>
+  
+1) Z tabulky položek vypočítejte součty částek pro jednotlivé
+faktury a čísla výrobků, celkové součty částek pro každou
+fakturu a součet všech částek v celé tabulce
 ```  
 SELECT IFNULL(polozky.faktura, 'celkem'), polozky.cislo_vyrobku, SUM(polozky.castka) FROM polozky GROUP BY polozky.faktura, polozky.cislo_vyrobku WITH ROLLUP
 
 SELECT IFNULL(polozky.faktura, 'celkem'), SUM(polozky.castka) FROM polozky GROUP BY polozky.faktura WITH ROLLUP
 ```
   
-2)
+2) Z tabulky faktur vypočítejte součet částek podle čísla zákazníka.
+Výpočet bude omezen jen na zaplacené faktury
 ```
 SELECT faktury.odberatel, SUM(faktury.castka) FROM faktury WHERE faktury.zaplaceno IS NOT null GROUP BY faktury.odberatel
 ```
-3)
+3) Z tabulky faktur vypočítejte součet částek podle čísla zákazníka.
+Dotaz zobrazí pouze řádky se součtem nad 40 000Kč
 ```
 SELECT faktury.odberatel, SUM(faktury.castka) AS soucet FROM faktury 
 GROUP BY faktury.odberatel HAVING soucet > 40000 
 ```
-4)
+4) Z tabulky faktur vypočítejte součet částek podle čísla zákazníka
+za rok 2018. Dotaz zobrazí pouze řádky se součtem nad 20
+000Kč
 ```
 SELECT faktury.odberatel, SUM(faktury.castka) FROM faktury WHERE year(vystaveno) = 2018 GROUP BY faktury.odberatel HAVING SUM(faktury.castka) > 20000
 ```
-5)
+5) Z tabulky položek spočítejte pro jednotlivé faktury součet podílů
+částka/množství
 ```
 SELECT polozky.faktura, SUM(polozky.castka /polozky.mnozstvi) FROM polozky GROUP BY polozky.faktura
 ```
+  </details>
