@@ -313,7 +313,7 @@ protiúčtů.
 - 5)Z tabulky obratů vypočítejte průměrný obrat pro
 jednotlivá čísla protiúčtů a celkový průměr.
   
-SELECT COUNT(faktury.zaplaceno) FROM faktury
+SELECT COUNT(faktury.zaplaceno) FROM faktury WHERE faktury.zaplaceno IS NOT NULL;
   
   SELECT SUM(obrat), COUNT(obraty.ucet) from obraty
   
