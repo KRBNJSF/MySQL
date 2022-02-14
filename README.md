@@ -301,27 +301,27 @@ FROM data WHERE zastupce in ('Jitka', 'Pavla',
   
 - 1)Z tabulky obratů zjistěte počet řádků, součet a
 průměr obratů a nejvyšší a nejmenší obrat. 
-  ```
-  SELECT COUNT(*) as pocet, SUM(obrat) as soucet, AVG(obrat) as prumer, MAX(obrat), MIN(obrat) FROM obraty
-  ```
+```
+SELECT COUNT(*) as pocet, SUM(obrat) as soucet, AVG(obrat) as prumer, MAX(obrat), MIN(obrat) FROM obraty
+```
 - 2)Z tabulky faktur zjistěte počet zaplacených faktur
 (vyplněno datum zaplacení).
-  ```
-  SELECT COUNT(faktury.zaplaceno) FROM faktury WHERE faktury.zaplaceno IS NOT NULL
-  ```
+```
+SELECT COUNT(faktury.zaplaceno) FROM faktury WHERE faktury.zaplaceno IS NOT NULL
+```
 - 3)Z tabulky obratů vypočtěte součet obratů a počet
 řádků pro jednotlivá čísla protiúčtů (sloupec „ucet“)
-  ```
-    SELECT SUM(obrat), COUNT(obraty.ucet) from obraty
-  ```
+```
+SELECT SUM(obrat), COUNT(obraty.ucet) from obraty
+```
 - 4)Z tabulky obratů zjistěte počet jednotlivých
 protiúčtů.
-  ```
-   SELECT COUNT(obraty.ucet) from obraty
+```
+SELECT COUNT(obraty.ucet) from obraty
   ```
 - 5)Z tabulky obratů vypočítejte průměrný obrat pro
 jednotlivá čísla protiúčtů a celkový průměr.
-  ```
-  SELECT obraty.ucet, AVG(obraty.obrat) FROM obraty GROUP BY obraty.ucet WITH ROLLUP
-  ```
+```
+SELECT obraty.ucet, AVG(obraty.obrat) FROM obraty GROUP BY obraty.ucet WITH ROLLUP
+```
 
