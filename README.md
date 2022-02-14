@@ -335,7 +335,7 @@ SELECT IFNULL(polozky.faktura, 'celkem'), SUM(polozky.castka) FROM polozky GROUP
   
 2)
 ```
-  
+SELECT faktury.odberatel, SUM(faktury.castka) FROM faktury WHERE faktury.zaplaceno IS NOT null GROUP BY faktury.odberatel
 ```
 3)
 ```
