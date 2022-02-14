@@ -344,7 +344,7 @@ GROUP BY faktury.odberatel HAVING soucet > 40000
 ```
 4)
 ```
-
+SELECT faktury.odberatel, SUM(faktury.castka) FROM faktury WHERE year(vystaveno) = 2018 GROUP BY faktury.odberatel HAVING SUM(faktury.castka) > 20000
 ```
 5)
 ```
