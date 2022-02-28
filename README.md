@@ -372,35 +372,49 @@ SELECT polozky.faktura, SUM(polozky.castka /polozky.mnozstvi) FROM polozky GROUP
  <details>
   <summary><b>1. SLIDE</b></summary>
   
+1) Z tabulky obraty4 po jednotlivých protiúčtech
+(sloupec účet) zjistěte podíl součtu poplatků a
+součet obratů v procentech.
+```
+SELECT obraty4.ucet, SUM(obraty4.poplatek) / SUM(obraty4.obrat) * 100 FROM obraty4 GROUP BY ucet
+```
+2) Z tabulky faktur určete počet neproplacených faktur.
+```
+SELECT COUNT(*) FROM faktury WHERE faktury.zaplaceno IS NULL
+```
+3) Z tabulky obratů vypočtěte součet obratů pro
+jednotlivé banky.
+```
+SELECT RIGHT(obraty.ucet, 4) as banka, SUM(obraty.obrat) FROM obraty GROUP BY banka
+```
+4) Z tabulky obratů vypočtěte součet obratů po rocích a
+měsících.
+```
+SELECT YEAR(obraty.datum), MONTH(obraty.datum), SUM(obraty.obrat) FROM obraty GROUP BY YEAR(obraty.datum)
+  ```
+5) Z tabulky obratů vypočtěte součet a počet obratů do
+10 000Kč a nad tuto částku.
+```
+SELECT CASE WHEN obraty.obrat > 10000 THEN ">10000" ELSE "<10000" END AS LIM, SUM(obraty.obrat) FROM obraty GROUP BY LIM
+```
+ </details>
+  
+<details>
+<summary><b>1. SLIDE</b></summary>
 1) Zobrazte názvy skupin, počet výrobků v každé skupině a
 průměrnou cenu výrobků ve skupině.
 ```
-SELECT obraty4.ucet, SUM(obraty4.poplatek) / SUM(obraty4.obrat) * 100 FROM obraty4 GROUP BY ucet
+SELECT skupiny.nazev, COUNT(*), AVG(cena) FROM vyrobky INNER JOIN skupiny ON skupiny.cislo = vyrobky.skupina GROUP BY skupiny.nazev
 ```
 2) Pro jednotlivá jména zákazníků zobrazte celkové
 nafakturované částky.
 ```
-SELECT COUNT(*) FROM faktury WHERE faktury.zaplaceno IS NULL
+
 ```
-3) Pro jednotlivá jména zákazníků zobrazte datum poslední
-fakturace.
+3) Z tabulky obratů vypočtěte součet obratů pro
+jednotlivé banky.
 ```
-SELECT RIGHT(obraty.ucet, 4) as banka, SUM(obraty.obrat) FROM obraty GROUP BY banka
-```
-4) Pro jednotlivé názvy výrobků zobrazte počet jejich prodejů,
-které jsou vyšší, než 200 jednotek.
-```
-SELECT YEAR(obraty.datum), MONTH(obraty.datum), SUM(obraty.obrat) FROM obraty GROUP BY YEAR(obraty.datum)
-  ```
-5) Zobrazte názvy výrobků, pro které je celková fakturovaná
-částka v tabulce položek vyšší, než 10 000 Kč.
-```
-SELECT CASE WHEN obraty.obrat > 10000 THEN ">10000" ELSE "<10000" END AS LIM, SUM(obraty.obrat) FROM obraty GROUP BY LIM
-```
-6) Zobrazte názvy skupin a rozdíl mezi nejvyšší a nejnižší cenou
-u výrobků ve skupině.
-```
-SELECT skupiny.nazev, COUNT(*), AVG(cena) FROM vyrobky INNER JOIN skupiny ON skupiny.cislo = vyrobky.skupina GROUP BY skupiny.nazev
+  
 ```
   
   </details>
