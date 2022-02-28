@@ -372,17 +372,17 @@ SELECT polozky.faktura, SUM(polozky.castka /polozky.mnozstvi) FROM polozky GROUP
  <details>
   <summary><b>1. SLIDE</b></summary>
   
-- 1)
+- 1)+
 ```
 SELECT obraty4.ucet, SUM(obraty4.poplatek) / SUM(obraty4.obrat) * 100 FROM obraty4 GROUP BY ucet
 ```
-- 2)
+- 2)+
 ```
 SELECT COUNT(*) FROM faktury WHERE faktury.zaplaceno IS NULL
 ```
-- 3)
+- 3)+
 ```
-
+SELECT RIGHT(obraty.ucet, 4) as banka, SUM(obraty.obrat) FROM obraty GROUP BY banka
 ```
 - 4)
 ```
