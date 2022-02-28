@@ -378,7 +378,7 @@ SELECT obraty4.ucet, SUM(obraty4.poplatek) / SUM(obraty4.obrat) * 100 FROM obrat
 ```
 - 2)
 ```
-
+SELECT COUNT(*) FROM faktury WHERE faktury.zaplaceno IS NULL
 ```
 - 3)
 ```
