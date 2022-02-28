@@ -372,29 +372,35 @@ SELECT polozky.faktura, SUM(polozky.castka /polozky.mnozstvi) FROM polozky GROUP
  <details>
   <summary><b>1. SLIDE</b></summary>
   
-- 1)+
+- 1) Zobrazte názvy skupin, počet výrobků v každé skupině a
+průměrnou cenu výrobků ve skupině.
 ```
 SELECT obraty4.ucet, SUM(obraty4.poplatek) / SUM(obraty4.obrat) * 100 FROM obraty4 GROUP BY ucet
 ```
-- 2)+
+- 2) Pro jednotlivá jména zákazníků zobrazte celkové
+nafakturované částky.
 ```
 SELECT COUNT(*) FROM faktury WHERE faktury.zaplaceno IS NULL
 ```
-- 3)+
+- 3) Pro jednotlivá jména zákazníků zobrazte datum poslední
+fakturace.
 ```
 SELECT RIGHT(obraty.ucet, 4) as banka, SUM(obraty.obrat) FROM obraty GROUP BY banka
 ```
-- 4) + 
+- 4) Pro jednotlivé názvy výrobků zobrazte počet jejich prodejů,
+které jsou vyšší, než 200 jednotek.
 ```
 SELECT YEAR(obraty.datum), MONTH(obraty.datum), SUM(obraty.obrat) FROM obraty GROUP BY YEAR(obraty.datum)
   ```
-- 5) + 
+- 5) Zobrazte názvy výrobků, pro které je celková fakturovaná
+částka v tabulce položek vyšší, než 10 000 Kč.
 ```
 SELECT CASE WHEN obraty.obrat > 10000 THEN ">10000" ELSE "<10000" END AS LIM, SUM(obraty.obrat) FROM obraty GROUP BY LIM
 ```
-  - 6) + 
+  - 6) Zobrazte názvy skupin a rozdíl mezi nejvyšší a nejnižší cenou
+u výrobků ve skupině.
 ```
-SELECT CASE WHEN obraty.obrat > 10000 THEN ">10000" ELSE "<10000" END AS LIM, SUM(obraty.obrat) FROM obraty GROUP BY LIM
+
 ```
   
   </details>
