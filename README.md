@@ -428,12 +428,12 @@ SELECT vyrobky.nazev, COUNT(*) FROM vyrobky JOIN polozky ON polozky.cislo_vyrobk
 5) Zobrazte názvy výrobků, pro které je celková fakturovaná
 částka v tabulce položek vyšší, než 10 000 Kč.
 ```
-
+SELECT vyrobky.nazev, SUM(polozky.castka) FROM vyrobky INNER JOIN polozky ON polozky.cislo_vyrobku = vyrobky.cislo GROUP BY vyrobky.nazev HAVING SUM(polozky.castka) > 10000
 ```
 6) Zobrazte názvy skupin a rozdíl mezi nejvyšší a nejnižší cenou
 u výrobků ve skupině.
 ```
-
+SELECT skupiny.nazev, MAX(cena) - MIN(cena) FROM vyrobky INNER JOIN skupiny ON skupiny.cislo = vyrobky.skupina GROUP BY skupiny.nazev
 ```
   
   </details>
