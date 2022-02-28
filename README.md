@@ -400,7 +400,7 @@ SELECT CASE WHEN obraty.obrat > 10000 THEN ">10000" ELSE "<10000" END AS LIM, SU
 6) Zobrazte názvy skupin a rozdíl mezi nejvyšší a nejnižší cenou
 u výrobků ve skupině.
 ```
-
+SELECT skupiny.nazev, COUNT(*), AVG(cena) FROM vyrobky INNER JOIN skupiny ON skupiny.cislo = vyrobky.skupina GROUP BY skupiny.nazev
 ```
   
   </details>
