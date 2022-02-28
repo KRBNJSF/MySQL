@@ -437,3 +437,21 @@ SELECT skupiny.nazev, MAX(cena) - MIN(cena) FROM vyrobky INNER JOIN skupiny ON s
 ```
   
   </details>
+  
+  <details>
+  <summary><b>3. SLIDE</b></summary>
+  
+  1)
+  ```
+  SELECT zakaznici.jmeno, vyrobky.nazev, SUM(polozky.mnozstvi)
+  ```
+  2)
+  ```
+  SELECT COUNT(platby.vs) FROM predpisy LEFT JOIN platby ON platby.vs = predpisy.vs
+  ```
+   3)
+  ```
+  SELECT vyrobky.
+  ```
+  
+  </details>
