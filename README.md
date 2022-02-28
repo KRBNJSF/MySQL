@@ -384,13 +384,17 @@ SELECT COUNT(*) FROM faktury WHERE faktury.zaplaceno IS NULL
 ```
 SELECT RIGHT(obraty.ucet, 4) as banka, SUM(obraty.obrat) FROM obraty GROUP BY banka
 ```
-- 4)
+- 4) + 
 ```
 SELECT YEAR(obraty.datum), MONTH(obraty.datum), SUM(obraty.obrat) FROM obraty GROUP BY YEAR(obraty.datum)
   ```
-- 5)
+- 5) + 
 ```
-
+SELECT CASE WHEN obraty.obrat > 10000 THEN ">10000" ELSE "<10000" END AS LIM, SUM(obraty.obrat) FROM obraty GROUP BY LIM
+```
+  - 6) + 
+```
+SELECT CASE WHEN obraty.obrat > 10000 THEN ">10000" ELSE "<10000" END AS LIM, SUM(obraty.obrat) FROM obraty GROUP BY LIM
 ```
   
   </details>
