@@ -400,21 +400,24 @@ SELECT CASE WHEN obraty.obrat > 10000 THEN ">10000" ELSE "<10000" END AS LIM, SU
  </details>
   
 <details>
-<summary><b>1. SLIDE</b></summary>
+<summary><b>2. SLIDE</b></summary>
+  
 1) Zobrazte názvy skupin, počet výrobků v každé skupině a
 průměrnou cenu výrobků ve skupině.
+  
 ```
 SELECT skupiny.nazev, COUNT(*), AVG(cena) FROM vyrobky INNER JOIN skupiny ON skupiny.cislo = vyrobky.skupina GROUP BY skupiny.nazev
 ```
+  
 2) Pro jednotlivá jména zákazníků zobrazte celkové
 nafakturované částky.
 ```
-
+kgj
 ```
 3) Z tabulky obratů vypočtěte součet obratů pro
 jednotlivé banky.
 ```
-  
+  kgj
 ```
   
   </details>
