@@ -412,7 +412,7 @@ SELECT skupiny.nazev, COUNT(*), AVG(cena) FROM vyrobky INNER JOIN skupiny ON sku
 2) Pro jednotlivá jména zákazníků zobrazte celkové
 nafakturované částky.
 ```
-kgj
+----
 ```
 3) Pro jednotlivá jména zákazníků zobrazte datum poslední
 fakturace.
