@@ -372,30 +372,25 @@ SELECT polozky.faktura, SUM(polozky.castka /polozky.mnozstvi) FROM polozky GROUP
  <details>
   <summary><b>1. SLIDE</b></summary>
   
-- 1)Z tabulky obratů zjistěte počet řádků, součet a
-průměr obratů a nejvyšší a nejmenší obrat. 
+- 1)
 ```
-SELECT COUNT(*) as pocet, SUM(obrat) as soucet, AVG(obrat) as prumer, MAX(obrat), MIN(obrat) FROM obraty
+
 ```
-- 2)Z tabulky faktur zjistěte počet zaplacených faktur
-(vyplněno datum zaplacení).
+- 2)
 ```
-SELECT COUNT(faktury.zaplaceno) FROM faktury WHERE faktury.zaplaceno IS NOT NULL
+
 ```
-- 3)Z tabulky obratů vypočtěte součet obratů a počet
-řádků pro jednotlivá čísla protiúčtů (sloupec „ucet“)
+- 3)
 ```
-SELECT SUM(obrat), COUNT(obraty.ucet) from obraty GROUP by ucet
+
 ```
-- 4)Z tabulky obratů zjistěte počet jednotlivých
-protiúčtů.
+- 4)
 ```
-SELECT COUNT(DISTINCT obraty.ucet) from obraty
+
   ```
-- 5)Z tabulky obratů vypočítejte průměrný obrat pro
-jednotlivá čísla protiúčtů a celkový průměr.
+- 5)
 ```
-SELECT obraty.ucet, AVG(obraty.obrat) FROM obraty GROUP BY obraty.ucet WITH ROLLUP
+
 ```
   
   </details>
