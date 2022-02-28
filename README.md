@@ -386,7 +386,7 @@ SELECT RIGHT(obraty.ucet, 4) as banka, SUM(obraty.obrat) FROM obraty GROUP BY ba
 ```
 - 4)
 ```
-
+SELECT YEAR(obraty.datum), MONTH(obraty.datum), SUM(obraty.obrat) FROM obraty GROUP BY YEAR(obraty.datum)
   ```
 - 5)
 ```
