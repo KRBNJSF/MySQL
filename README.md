@@ -414,10 +414,26 @@ nafakturované částky.
 ```
 kgj
 ```
-3) Z tabulky obratů vypočtěte součet obratů pro
-jednotlivé banky.
+3) Pro jednotlivá jména zákazníků zobrazte datum poslední
+fakturace.
 ```
-  kgj
+SELECT zakaznici.jmeno, SUM(faktury.castka),MAX(faktury.zaplaceno) FROM faktury INNER JOIN zakaznici ON zakaznici.id = faktury.odberatel GROUP BY zakaznici.jmeno
+```
+4) Pro jednotlivé názvy výrobků zobrazte počet jejich prodejů,
+které jsou vyšší, než 200 jednotek.
+```
+
+```
+ 
+5) Zobrazte názvy výrobků, pro které je celková fakturovaná
+částka v tabulce položek vyšší, než 10 000 Kč.
+```
+
+```
+6) Zobrazte názvy skupin a rozdíl mezi nejvyšší a nejnižší cenou
+u výrobků ve skupině.
+```
+
 ```
   
   </details>
