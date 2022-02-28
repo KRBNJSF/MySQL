@@ -422,7 +422,7 @@ SELECT zakaznici.jmeno, SUM(faktury.castka),MAX(faktury.zaplaceno) FROM faktury 
 4) Pro jednotlivé názvy výrobků zobrazte počet jejich prodejů,
 které jsou vyšší, než 200 jednotek.
 ```
-
+SELECT vyrobky.nazev, COUNT(*) FROM vyrobky JOIN polozky ON polozky.cislo_vyrobku = vyrobky.cislo WHERE polozky.mnozstvi > 200 GROUP BY vyrobky.nazev
 ```
  
 5) Zobrazte názvy výrobků, pro které je celková fakturovaná
