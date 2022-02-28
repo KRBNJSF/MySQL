@@ -374,7 +374,7 @@ SELECT polozky.faktura, SUM(polozky.castka /polozky.mnozstvi) FROM polozky GROUP
   
 - 1)
 ```
-
+SELECT obraty4.ucet, SUM(obraty4.poplatek) / SUM(obraty4.obrat) * 100 FROM obraty4 GROUP BY ucet
 ```
 - 2)
 ```
