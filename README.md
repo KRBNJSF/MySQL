@@ -532,3 +532,146 @@ Zobrazení tržeb, které dosahují alespoň 10% celkového objemu tržeb:
 ```
 SELECT datum, prodejce, trzba FROM trzby WHERE trzba >= (SELECT SUM(trzba) FROM trzby)*0.1
 ```
+
+### MIN A MAX VE SKALÁRNÍM PODDOTAZU
+  
+V případě stejných maxim bychom potřebovali vypsat všechna. Takto to nelze:
+```
+SELECT * FROM trzby ORDER BY trzba DESC LIMIT 1;
+```
+Takto ano:
+```
+SELECT * FROM trzby WHERE trzba = (SELECT MAX(trzba) FROM trzby);
+```
+
+### SKALÁRNÍ PODDOTAZ V KLAUZULI HAVING
+  
+Zobrazení součtů tržeb po dnech tam, kde je tržba větší, než celkový průměr tržeb:
+```
+SELECT datum, SUM(trzba) AS soucet FROM trzby GROUP BY datum HAVING SUM(trzba) > (SELECT AVG(trzba) FROM trzby;
+```
+Zobrazení průměrných tržeb za únor, pokud jsou vyšší, než je průměr za leden:
+```
+SELECT prodejce, AVG(trzba) AS prumer FROM trzby WHERE MONTH(datum) = 2  GROUP BY prodejce HAVING AVG(trzba) > (SELECT AVG(trzba) FROM trzby WHERE MONTH(datum)=1);
+```
+### DÍLČÍ SOUHRN VZHLEDEM K HODNOTĚ VYBR. SLOUPCE
+  
+Zobrazte prodejce, datum, tržbu a pro každého prodejce součet jeho tržeb:
+```
+SELECT prodejce, datum, trzba, (SELECT SUM(trzba) FROM trzby AS trzby1 WHERE trzby1.prodejce = trzby.prodejce) AS celkem 
+FROM trzby
+```
+Totéž s INNER JOIN:
+```
+SELECT trzby.prodejce, trzby.datum, trzby.trzba, souhrn_trzeb.soucet
+FROM trzby
+INNER JOIN (SELECT prodejce, SUM(trzba) AS soucet FROM trzby GROUP BY prodejce) AS souhrn_trzeb ON trzby.prodejce=souhrn_trzeb.prodejce;
+```
+  
+### PODDOTAZ V OPERÁTORU IN
+
+Z tabulky tržeb zobrazte řádky u kterých se datum nachází v tabulce datumy:
+
+- Vnitřní spojení způsobí duplicitu:
+```
+SELECT trzby.datum, trzby.prodejce, trzby.trzba FROM trzby INNER JOIN datumy ON trzby.datum = datumy.datum;
+```
+- Kromě použití DISTINCT ještě můžeme udělat:
+```
+SELECT trzby.datum, trzby.prodejce, trzby.trzba FROM trzby WHERE datum IN (SELECT datum FROM datumy);
+``` 
+Zobrazte úhrnné prodeje pro jednotlivé prodejce a součty omezte na dny, zapsané v tabulce datumů:
+```
+SELECT prodejce, SUM(trzba) AS celkem FROM trzby WHERE datum IN (SELECT datum FROM datumy) GROUP BY prodejce;
+```
+Totéž s omezením na leden:
+```
+SELECT prodejce, SUM(trzba) AS celkem FROM trzby WHERE datum IN (SELECT datum FROM datumy WHERE MONTH(datum) = 1) GROUP BY prodejce;
+```
+  
+### PODDOTAZ IN JAKO VNĚJŠÍ SPOJENÍ
+
+Z tabulky tržeb zobrazte řádky u kterých se datum nenachází v tabulce datumy:
+ 
+- Pomocí LEFT OUTER JOIN:
+```
+SELECT trzby.datum, trzby.prodejce, trzby.trzba FROM trzby LEFT OUTER JOIN datumy ON trzby.datum = datumy.datum WHERE datumy.datum IS NULL;
+```
+- Pomocí poddotazu:
+```
+SELECT trzby.datum, trzby.prodejce, trzby.trzba FROM trzby WHERE NOT datum IN (SELECT datum FROM datumy);
+```
+  
+### PODDOTAZ V OPERÁTORU IN
+
+- Poddotazy jsou efektivní, pokud vnořený SELECT dává výrayně menší počet záznamů oproti v
+- Vnější tabulce.
+
+Seskupování v operátoru IN – zobrazte z tabulky datumů ty, kde je v tabulce tržeb součet jednotlivých tržeb větší, než 10000Kč:
+```
+SELECT datum FROM datumy WHERE datum IN(SELECT datum FROM trzby GROUP BY datum HAVING SUM(trzba)>10000);
+```
+  
+### PODDOTAZ V SEZNAMU ALL/ANY
+  
+IN – hodnota ve sloupci se musí rovnat alespoň jedné hodnotě v seznamu
+  
+ALL – hodnota ve sloupci musí být větší/menší, než všechny hodnoty v seznamu:
+```
+SELECT castka FROM vydani WHERE castka > ALL(SELECT trzba FROM trzby);
+```
+ANY(SOME) -  hodnota ve sloupci musí být větší/menší, než alespoň jedna hodnota v seznamu:
+```
+SELECT castka FROM vydani WHERE castka > ANY(SELECT trzba FROM trzby);
+```
+Výběr hodnot, které leží uprostřed intervalu, definovaného nejmenší a největší hodnotou v seznamu:
+```
+SELECT * FROM vydani WHERE castka >ANY(SELECT trzba FROM trzby) AND castka <ANY(SELECT trzba FROM trzby);
+```
+Zobrazení řádků z tabulky tržeb pro Jitku, u kterých je tržba větší, než alespoň jedna tržba ostatních prodejců:
+```
+SELECT datum, prodejce, trzba FROM trzby WHERE prodejce = 'Jitka' AND trzba > ANY(SELECT trzba FROM trzby WHERE prodejce <> 'Jitka');
+```
+Zobrazení řádků pro Karla, pro které platí, že tržba je větší, než alespoň jedna průměrná tržba u ostatních prodejců:
+```
+SELECT datum, prodejce, trzba FROM trzby WHERE prodejce = 'Karel' AND trzba > ANY(SELECT AVG(trzba) FROM trzby WHERE prodejce <> 'Karel' GROUP BY prodejce);
+```
+Pokud by to mělo být větší, než průměrná tržba u všech ostatních prodejců, místo ANY dáme ALL.
+
+### TABULKOVÉ PODDOTAZY
+
+Tabulkové poddotazy reprezentují další tabulku. Ta se dá běžným způsobem (výběr dat spojení) dále používat.
+  
+Zobrazení naposledy provedené akce každé obce:
+```
+SELECT akce2.obec, akce2.cislo, akce2.dokonceno FROM akce2 INNER JOIN (SELECT obec, MAX(dokonceno) AS datum FROM akce2 GROUP BY obec) AS vyber ON akce2.obec=vyber.obec AND akce2.dokonceno=vyber.datum;  
+```
+Zobrazení výrobků s nejvyšší cenou každé skupiny. Poddotaz vybere z tabulky výrobků nejvyšší cenu pro každou skupinu a tento výběr se spojí s tabulkou skupin a tabulkou výrobků:
+```
+SELECT skupiny.nazev, vyrobky.nazev, vyber.maximum FROM skupiny INNER JOIN vyrobky ON skupiny.cislo = vyrobky.skupina INNER JOIN (SELECT skupina, MAX(cena) AS maximum FROM vyrobky GROUP BY skupina) AS vyber ON vyrobky.skupina = vyber.skupina AND vyrobky.cena = vyber.maximum;
+```
+Zobrazení součtů dodávek jednotlivých výrobků, kde dodané množství je NULL:
+```
+SELECT vyrobky.nazev, IFNULL(podvyber.pocet, 0) AS pocet FROM vyrobky LEFT OUTER JOIN (SELECT polozky.cislo_vyrobku, COUNT(*) AS pocet FROM polozky WHERE polozky.mnozstvi IS NULL GROUP BY cislo_vyrobku) AS podvyber ON vyrobky.cislo=podvyber.cislo_vyrobku;
+```
+Zobrazení dvou řádků z tabulky výrobků s nejvyšší cenou u výrobků ze skladu č. 1 a stejně tak u výrobků ze skladu č. 2:
+```
+SELECT * FROM (SELECT * FROM vyrobky WHERE sklad = 1 LIMIT 2) AS sklad1 UNION SELECT * FROM (SELECT * FROM vyrobky WHERE sklad = 2 LIMIT 2) AS sklad2 ORDER BY cena DESC
+```
+  
+### OPERÁTOR EXISTS
+  
+Operátor EXISTS testuje, zdali se v jedné tabulce vyskytují řádky, které hodnotami v některém sloupci odpovídají řádkům v druhé tabulce. Obecná syntaxe:
+```
+SELECT <seznam_polí> FROM Tabulka1 WHERE EXISTS (SELECT <seznam_polí> FROM Tabulka 2 WHERE <spojovací_podmínka>).
+```
+Zobrazení názvů výrobků, jejichž čísla se vyskytují v tabulce dodávek:
+```
+SELECT vyrobky.nazev FROM vyrobky WHERE EXISTS (SELECT * FROM dodavky WHERE dodavky.cislo_vyrobku = vyrobky.cislo);
+```
+Zobrazení názvů výrobků, jejichž čísla se vyskytují v tabulce dodávek a současně alespoň jedno jejich prodané množství bylo přes 200ks:
+```
+SELECT vyrobky.nazev FROM vyrobky WHERE EXISTS (SELECT * FROM dodavky WHERE dodavky.cislo_vyrobku = vyrobky.cislo AND dodavky.mnozstvi>200);
+```
+Operátor EXISTS lze zpravidla nahradit jinými prostředky SQL. Jeho nevýhoda je v nízké efektivitě. Vnitřní příkaz SELECT se musí opakovaně vyhodnocovat pro každý řádek z první tabulky.
+  
