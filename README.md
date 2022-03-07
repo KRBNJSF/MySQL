@@ -476,3 +476,39 @@ SELECT zakaznici.jmeno, CASE WHEN faktury.zaplaceno IS NULL THEN 'Nezaplaceno' E
   
   7.03. 2022
   ---
+  
+ PODDOTAZY
+- Příkazy SELECT lze vnořovat do sebe a vytvářet tak jejich hierarchii. Vnořené příkazy SELECT označujame jako poddotazy.
+- Příklad: Zobrazte čísla dodaných výrobků, kde je vyplněno datum dodání a dodané množství je vyšší, než 200:
+1. krok: ```SELECT * FROM dodavky WHERE NOT datum IS NULL```
+2. krok: ```SELECT cislo_vyrobku FROM (SELECT * FROM dodavky WHERE NOT datum IS NULL) AS poddotaz WHERE mnozstvi>200```
+  
+```
+SELECT cislo_vyrobku FROM (SELECT * FROM dodavky WHERE datum IS NOT NULL) AS poddotaz WHERE mnozstvi < 200  
+```
+  
+Vnořený příkaz SELECT se vždy zapisuje do závorky a většinou i označuje pomocí aliasu
+  
+Vnoření příkazů SELECT do sebe může být několikanásobné.
+  
+Zpracování probíhá „zdola nahoru“ tj. Nejprve se provede příkaz SELECT vnořený nejhlouběji.
+  
+  <b>Typy poddotazů:</b>
+- Skalární (vrací jedinou hodnotu)
+- Sloupcový (vrací sloupec hodnot)
+- Tabulkový (vrací tabulku hodnot)
+  
+Příklad: napište dotaz, který zobrazí datum, jméno prodejce, tržbu a pro srovnání také průměrnou hodnotu tržby za celou tabulku:
+  
+```
+SELECT datum, prodejce, trzba, (SELECT AVG(trzba) FROM trzby) AS prumer FROM trzby
+```
+Místo průměru použijte procentuální podíl jednotlivých tržeb na jejich celkovém součtu:
+
+```
+SELECT datum, prodejce, trzba, trzba/(SELECT SUM(trzba) FROM trzby)*100 AS podil FROM trzby 
+```
+Pro jednotlivé prodejce:
+```
+SELECT prodejce, SUM(trzba), SUM(trzba)/(SELECT SUM(trzba) FROM trzby)*100 AS podil FROM trzby GROUP BY prodejce;
+```
