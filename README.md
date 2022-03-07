@@ -441,17 +441,34 @@ SELECT skupiny.nazev, MAX(cena) - MIN(cena) FROM vyrobky INNER JOIN skupiny ON s
   <details>
   <summary><b>3. SLIDE</b></summary>
   
-  1)
+  1) Zobrazte jména jednotlivých zákazníků, názvy výrobků a
+uhrnná prodaná množství pro jednotlivé zákazníky a výrobky.
   ```
   SELECT zakaznici.jmeno, vyrobky.nazev, SUM(polozky.mnozstvi)
   ```
-  2)
+  2) Určete celkový počet předpisů, pro které neexistuje příslušná
+platba.
   ```
-  SELECT COUNT(platby.vs) FROM predpisy LEFT JOIN platby ON platby.vs = predpisy.vs
+  SELECT COUNT(*) FROM predpisy LEFT JOIN platby ON predpisy.vs = platby.vs WHERE platby.id IS NULL;
   ```
-   3)
+   3) Zobrazte jména všech výrobků a jejich úhrnná prodaná
+množství.
   ```
   SELECT vyrobky.
+  ```
+  4)
+  ```
+  
+  ```
+  5)
+  ```
+  
+  ```
+  6) Pro jednotlivé zákazníky zobrazte celkové nafakturované
+částky, zvlášť pro neproplacené a zvlášť pro proplacené
+faktury.
+  ```
+SELECT zakaznici.jmeno, CASE WHEN faktury.zaplaceno IS NULL THEN 'Nezaplaceno' ELSE 'Zaplaceno' END AS zap_nezap, SUM(faktury.castka) FROM zakaznici INNER JOIN faktury ON faktury.odberatel = zakaznici.id GROUP BY zakaznici.jmeno, zap_nezap
   ```
   
   </details>
