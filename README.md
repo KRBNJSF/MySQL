@@ -479,7 +479,7 @@ SELECT zakaznici.jmeno, CASE WHEN faktury.zaplaceno IS NULL THEN 'Nezaplaceno' E
   
   <a href="https://github.com/KRBNJSF/MySQL/raw/main/25_poddotazy.odp">Download 25</a>
   
- PODDOTAZY
+### PODDOTAZY
 - Příkazy SELECT lze vnořovat do sebe a vytvářet tak jejich hierarchii. Vnořené příkazy SELECT označujame jako poddotazy.
 - Příklad: Zobrazte čísla dodaných výrobků, kde je vyplněno datum dodání a dodané množství je vyšší, než 200:
 1. krok: ```SELECT * FROM dodavky WHERE NOT datum IS NULL```
@@ -500,6 +500,8 @@ Zpracování probíhá „zdola nahoru“ tj. Nejprve se provede příkaz SELECT
 - Sloupcový (vrací sloupec hodnot)
 - Tabulkový (vrací tabulku hodnot)
   
+### SKALÁRNÍ PODDOTAZY
+  
 Příklad: napište dotaz, který zobrazí datum, jméno prodejce, tržbu a pro srovnání také průměrnou hodnotu tržby za celou tabulku:
   
 ```
@@ -513,4 +515,20 @@ SELECT datum, prodejce, trzba, trzba/(SELECT SUM(trzba) FROM trzby)*100 AS podil
 Pro jednotlivé prodejce:
 ```
 SELECT prodejce, SUM(trzba), SUM(trzba)/(SELECT SUM(trzba) FROM trzby)*100 AS podil FROM trzby GROUP BY prodejce;
+```
+  
+Poddotaz nemusí být v GROUP BY, vyrábíme tak agregační funkci:
+```
+SELECT prodejce, SUM(trzba) AS soucet, (SELECT SUM(trzba) FROM trzby) AS celkem FROM trzby GROUP BY prodejce;
+```
+  
+### SKALÁRNÍ PODDOTAZ V KLAUZULI WEHERE
+
+Zobrazení nadprůměrných tržeb:
+```
+SELECT datum, prodejce, trzba FROM trzby WHERE trzba > (SELECT AVG(trzba) FROM trzby);  
+```
+Zobrazení tržeb, které dosahují alespoň 10% celkového objemu tržeb:
+```
+SELECT datum, prodejce, trzba FROM trzby WHERE trzba >= (SELECT SUM(trzba) FROM trzby)*0.1
 ```
