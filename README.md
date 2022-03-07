@@ -477,6 +477,8 @@ SELECT zakaznici.jmeno, CASE WHEN faktury.zaplaceno IS NULL THEN 'Nezaplaceno' E
   7.03. 2022
   ---
   
+  <a href="https://github.com/KRBNJSF/MySQL/raw/main/25_poddotazy.odp">Download 25</a>
+  
  PODDOTAZY
 - Příkazy SELECT lze vnořovat do sebe a vytvářet tak jejich hierarchii. Vnořené příkazy SELECT označujame jako poddotazy.
 - Příklad: Zobrazte čísla dodaných výrobků, kde je vyplněno datum dodání a dodané množství je vyšší, než 200:
