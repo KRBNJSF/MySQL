@@ -455,3 +455,7 @@ SELECT skupiny.nazev, MAX(cena) - MIN(cena) FROM vyrobky INNER JOIN skupiny ON s
   ```
   
   </details>
+
+  
+  7.03. 2022
+  ---
