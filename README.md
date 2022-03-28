@@ -675,3 +675,5 @@ SELECT vyrobky.nazev FROM vyrobky WHERE EXISTS (SELECT * FROM dodavky WHERE doda
 ```
 Operátor EXISTS lze zpravidla nahradit jinými prostředky SQL. Jeho nevýhoda je v nízké efektivitě. Vnitřní příkaz SELECT se musí opakovaně vyhodnocovat pro každý řádek z první tabulky.
   
+  
+<a href="https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html">MySql operators</a>
