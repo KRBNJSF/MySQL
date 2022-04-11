@@ -2,6 +2,8 @@
 
 <a href="https://vydb1.spsmb.cz/phpmyadmin/index.php">login</a>
 
+<a href="https://www.junext.net/mysql/">Manual</a>
+
 Seskupování a souhrny
 ---
 
